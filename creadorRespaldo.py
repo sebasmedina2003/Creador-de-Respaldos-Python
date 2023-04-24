@@ -2,6 +2,28 @@ from os import listdir, mkdir
 from shutil import copy2
 
 
+def lecturaPaths() -> None:
+    while True:
+        extension = input("Ingrese la extension que desea respaldar: ")
+        pathInicio = input("Ingrese el path que desea evaluar: ")
+        pathDestino = input("Ingrese el path donde desee copiar: ")
+        pathDestino = pathDestino.replace("\\\\", "/")
+        print("")
+        try:
+            directorioPrincipal = listdir(pathInicio)
+            directorioSecundario = listdir(pathDestino)
+            break
+        except:
+            print("Ingrese directorios correctos\n")
+
+    evaluacionSubDirectorios(
+        listaDirectorios=directorioPrincipal, path=pathInicio, extension=extension, pathDestino=pathDestino)
+
+
+print("")
+input("Precione enter para salir del programa")
+
+
 def evaluarExtension(archivo: str, pathDestino: str, extension: str, pathArchivo: str) -> None:
     """
     Verifica si la extension del archivo leido es el pedido y si la carpeta del directorio donde se esta evaluando existe en el destino,
@@ -44,15 +66,5 @@ def evaluacionSubDirectorios(listaDirectorios: list, path: str, extension: str, 
                              extension=extension, pathArchivo=path)
 
 
-extension = input("Ingrese la extension que desea respaldar: ")
-pathInicio = input("Ingrese el path que desea evaluar: ")
-pathDestino = input("Ingrese el path donde desee copiar: ")
-pathDestino = pathDestino.replace("\\\\", "/")
-print("")
-directorioPrincipal = listdir(pathInicio)
-
-evaluacionSubDirectorios(
-    listaDirectorios=directorioPrincipal, path=pathInicio, extension=extension, pathDestino=pathDestino)
-
-print("")
-input("Precione enter para salir del programa")
+if __name__ == "__main__":
+    lecturaPaths()
