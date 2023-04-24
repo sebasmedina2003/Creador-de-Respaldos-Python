@@ -1,4 +1,5 @@
 from os import listdir, mkdir
+from os.path import isdir, exists
 from shutil import copy2
 
 
@@ -11,15 +12,19 @@ def lecturaPaths() -> None:
         extension = input("Ingrese la extension que desea respaldar: ")
         pathInicio = input("Ingrese el path que desea evaluar: ")
         pathDestino = input("Ingrese el path donde desee copiar: ")
+
+        pathInicio = pathInicio.replace("\\\\", "/")
         pathDestino = pathDestino.replace("\\\\", "/")
         print("")
-        try:
-            directorioPrincipal = listdir(pathInicio)
-            directorioSecundario = listdir(pathDestino)
-            break
-        except:
-            print("Ingrese directorios correctos\n")
 
+        if isdir(pathInicio) and isdir(pathDestino):
+            break
+        elif isdir(pathInicio) and not isdir(pathDestino):
+            print("La ruta de destino no existe, ingrese direcciones validas\n")
+        else:
+            print("La ruta de busqueda no existe, ingrese direcciones validas\n")
+
+    directorioPrincipal = listdir(pathInicio)
     evaluacionSubDirectorios(
         listaDirectorios=directorioPrincipal, path=pathInicio, extension=extension, pathDestino=pathDestino)
 
@@ -29,21 +34,22 @@ def evaluarExtension(archivo: str, pathDestino: str, extension: str, pathArchivo
     Verifica si la extension del archivo leido es el pedido y si la carpeta del directorio donde se esta evaluando existe en el destino,
     en caso de no existir se crea y luego se hace la copia del archivo, si ya existe solo se hace copia del archivo a destino
     """
-    carpetasDestino = listdir(pathDestino)
     aux = pathArchivo.split("/")
     carpeta = aux[len(aux)-1]
     pathArchivo += f"/{archivo}"
     pathDestino += f"/{carpeta}"
 
-    if (extension in archivo) and (carpeta in carpetasDestino):
+    if (extension in archivo) and (exists(pathDestino)):
         print(f"Copiando {archivo} a {pathDestino}")
         copy2(pathArchivo, pathDestino)
 
-    elif (extension in archivo) and (not carpeta in carpetasDestino):
+    elif (extension in archivo) and (not exists(pathDestino)):
         print(f"Creando carpeta {carpeta}")
         mkdir(pathDestino)
         print(f"Copiando {archivo} a {pathDestino}")
         copy2(pathArchivo, pathDestino)
+    else:
+        print(f"Error con el archivo {archivo} en la carpeta {carpeta}")
 
 
 def evaluacionSubDirectorios(listaDirectorios: list, path: str, extension: str, pathDestino: str) -> None:
@@ -53,14 +59,12 @@ def evaluacionSubDirectorios(listaDirectorios: list, path: str, extension: str, 
     y si existe la carpeta en el directorio destino, en caso de no existir la carpeta la crea y copia el archivo
     """
     for subDirectorios in listaDirectorios:
-        if (not "." in subDirectorios) and (not "sys" in subDirectorios):
+        if (not "." in subDirectorios) and (not "sys" in subDirectorios.lower()):
             newPath = f"{path}/{subDirectorios}"
-            try:
+            if isdir(newPath):
                 directorio = listdir(newPath)
                 evaluacionSubDirectorios(
-                    listaDirectorios=directorio, path=newPath, extension=extension, pathDesino=pathDestino)
-            except:
-                pass
+                    listaDirectorios=directorio, path=newPath, extension=extension, pathDestino=pathDestino)
         else:
             evaluarExtension(archivo=subDirectorios, pathDestino=pathDestino,
                              extension=extension, pathArchivo=path)
