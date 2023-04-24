@@ -3,6 +3,10 @@ from shutil import copy2
 
 
 def lecturaPaths() -> None:
+    """
+    Funcion principal del programa, pide 2 directorios, el primero es donde se va a buscar los archivos y el segundo es
+    donde se van a copiar los de la extension pedida, se valida la entrada de los paths.
+    """
     while True:
         extension = input("Ingrese la extension que desea respaldar: ")
         pathInicio = input("Ingrese el path que desea evaluar: ")
@@ -18,10 +22,6 @@ def lecturaPaths() -> None:
 
     evaluacionSubDirectorios(
         listaDirectorios=directorioPrincipal, path=pathInicio, extension=extension, pathDestino=pathDestino)
-
-
-print("")
-input("Precione enter para salir del programa")
 
 
 def evaluarExtension(archivo: str, pathDestino: str, extension: str, pathArchivo: str) -> None:
@@ -68,3 +68,5 @@ def evaluacionSubDirectorios(listaDirectorios: list, path: str, extension: str, 
 
 if __name__ == "__main__":
     lecturaPaths()
+    print("")
+    input("Precione enter para salir del programa")
