@@ -59,7 +59,7 @@ def evaluacionSubDirectorios(listaDirectorios: list, path: str, extension: str, 
     y si existe la carpeta en el directorio destino, en caso de no existir la carpeta la crea y copia el archivo
     """
     for subDirectorios in listaDirectorios:
-        if (not "." in subDirectorios) and (not "sys" in subDirectorios.lower()):
+        if (isdir(subDirectorios)) and (not "sys" in subDirectorios.lower()):
             newPath = f"{path}/{subDirectorios}"
             if isdir(newPath):
                 directorio = listdir(newPath)
